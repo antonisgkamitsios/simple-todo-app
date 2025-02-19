@@ -1,0 +1,30 @@
+package view
+
+import "github.com/antonisgkamitsios/simple-todo-app/view/layout"
+
+templ Index() {
+	@layout.Base() {
+		<section class="text-center py-20 bg-blue-500 text-white">
+			<h1 class="text-4xl font-bold">Stay Organized, Stay Productive</h1>
+			<p class="mt-4 text-lg">Manage your tasks efficiently with our simple and intuitive to-do app.</p>
+		</section>
+		<!-- Features -->
+		<section class="max-w-6xl mx-auto py-16 px-4">
+			<h2 class="text-3xl font-bold text-center text-gray-800">Why Use Our App?</h2>
+			<div class="grid md:grid-cols-3 gap-6 mt-10">
+				<div class="bg-white p-6 shadow-md rounded-md">
+					<h3 class="text-xl font-semibold text-gray-700">Easy to Use</h3>
+					<p class="text-gray-600 mt-2">A simple interface that helps you focus on your tasks, not the complexity.</p>
+				</div>
+				<div class="bg-white p-6 shadow-md rounded-md">
+					<h3 class="text-xl font-semibold text-gray-700">Cloud Sync</h3>
+					<p class="text-gray-600 mt-2">Access your to-do list from any device, anytime.</p>
+				</div>
+				<div class="bg-white p-6 shadow-md rounded-md">
+					<h3 class="text-xl font-semibold text-gray-700">Stay Organized</h3>
+					<p class="text-gray-600 mt-2">Keep track of your tasks, deadlines, and progress effortlessly.</p>
+				</div>
+			</div>
+		</section>
+	}
+}

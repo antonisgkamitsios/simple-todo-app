@@ -1,0 +1,29 @@
+package layout
+
+import "github.com/antonisgkamitsios/simple-todo-app/view/components"
+import "github.com/antonisgkamitsios/simple-todo-app/internal/htmx"
+
+templ Base() {
+	if htmx.ContextGetHtmxRequest(ctx) {
+		<div id="contents">
+			{ children... }
+		</div>
+	} else {
+		<!DOCTYPE html>
+		<html lang="en">
+			<head>
+				<meta charset="UTF-8"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+				<link rel="stylesheet" type="text/css" href="static/styles.css"/>
+				<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+				<title>Simple Todo App</title>
+			</head>
+			<body>
+				@components.Header()
+				<div id="contents">
+					{ children... }
+				</div>
+			</body>
+		</html>
+	}
+}

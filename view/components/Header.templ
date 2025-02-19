@@ -1,0 +1,17 @@
+package components
+
+templ Header() {
+	<header class="border-b border-harvest-gold-400">
+		<nav class="bg-white shadow-md">
+			<div class="max-w-6xl mx-auto px-4">
+				<div class="flex justify-between items-center py-4">
+					<a href="/" class="text-xl font-bold text-gray-800">Todo App</a>
+					<div hx-boost="true" hx-target="#contents" hx-swap="outerHTML show:no-scroll">
+						<a href="/" class="text-gray-600 hover:text-blue-500 px-4">Home</a>
+						<a href="/todos" class="text-gray-600 hover:text-blue-500 px-4">Todos</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+}
