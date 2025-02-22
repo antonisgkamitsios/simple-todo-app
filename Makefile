@@ -2,7 +2,7 @@
 # re-create _templ.txt files on change, then send reload event to browser. 
 # Default url: http://localhost:7331
 live/templ:
-	templ generate --watch --proxy="http://localhost:3000" --open-browser=false -v
+	templ generate --watch --proxy="http://localhost:3000" --open-browser=false -v --path="./view"
 
 # first kill any process that runs on 3000 and run air to detect any go file changes
 # to re-build and re-run the server
@@ -17,7 +17,7 @@ live/server:
 
 # run tailwind css to generate the styles.css bundle in watch mode
 live/tailwind:
-	npx @tailwindcss/cli -i assets/css/app.css -o static/styles.css --minify --watch=always
+	npx --yes @tailwindcss/cli -i assets/css/app.css -o static/styles.css --minify --watch=always
 
 # watch for any js or css change in the assets/ folder, then reload the browser via templ proxy.
 live/sync_assets:
@@ -27,7 +27,7 @@ live/sync_assets:
 	--build.delay "100" \
 	--build.exclude_dir "" \
 	--build.include_dir "static" \
-	--build.include_ext "js,css"
+	--build.include_ext "js"
 
 # run all the 4 processes in parallel
 live:
