@@ -15,5 +15,5 @@ func (app *application) routes() http.Handler {
 
 	router.HandlerFunc(http.MethodGet, "/todos", app.handleTodos)
 
-	return app.comesFromHTMX(router)
+	return app.disableCacheInDevMode(app.comesFromHTMX(router))
 }
