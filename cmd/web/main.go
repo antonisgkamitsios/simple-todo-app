@@ -13,27 +13,28 @@ type config struct {
 
 type application struct {
 	config config
-	// add new logger field
 	logger *slog.Logger
 }
 
 func main() {
-	// initialize logger and pass it to the application struct
 	logger := slog.New((slog.NewTextHandler(os.Stdout, nil)))
+
+	cfg := config{
+		env: "development",
+	}
+
 	app := &application{
 		logger: logger,
+		config: cfg,
 	}
 
 	srv := &http.Server{
-		Addr:    ":3000",
-		Handler: app.routes(),
-		// here we explicitly provide to the server our logger for logging errors
+		Addr:     ":3000",
+		Handler:  app.routes(),
 		ErrorLog: slog.NewLogLogger(app.logger.Handler(), slog.LevelError),
 	}
 
-	// change fmt to logger.Info
 	logger.Info("server is running on port 3000")
-	// remove log.Fatal and replace it with waiting on the error and if so call the logger.Error + os.Exit
 	err := srv.ListenAndServe()
 
 	logger.Error(err.Error())
