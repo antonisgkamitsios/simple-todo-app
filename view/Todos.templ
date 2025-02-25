@@ -1,9 +1,26 @@
 package view
 
 import "github.com/antonisgkamitsios/simple-todo-app/view/layout"
+import "github.com/antonisgkamitsios/simple-todo-app/internal/data" // new import
 
-templ Todos() {
-  @layout.Base() {
-    <div>This is a simple todos page!</div>
-  }
+// update signature to accept a slice of Todos
+templ Todos(todos []data.Todo) {
+	@layout.Base() {
+		<div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+			<h1 class="text-2xl font-bold mb-4">My Todos</h1>
+			if len(todos) == 0 {
+				<div>
+					<p class="text-gray-500 text-center">No todos yet. Add some tasks!</p>
+				</div>
+			} else {
+				<ul class="space-y-3">
+					for _,todo := range todos {
+						<li class="flex items-center justify-between bg-gray-200 p-3 rounded-lg">
+							<span class="text-lg">{ todo.Title }</span>
+						</li>
+					}
+				</ul>
+			}
+		</div>
+	}
 }

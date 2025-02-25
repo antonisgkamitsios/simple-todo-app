@@ -1,9 +1,11 @@
 package main
 
 import (
-	"log/slog" // new import
+	"log/slog"
 	"net/http"
-	"os" // new import
+	"os"
+
+	"github.com/antonisgkamitsios/simple-todo-app/internal/data"
 )
 
 type config struct {
@@ -14,6 +16,7 @@ type config struct {
 type application struct {
 	config config
 	logger *slog.Logger
+	models data.Models
 }
 
 func main() {
@@ -23,9 +26,12 @@ func main() {
 		env: "development",
 	}
 
+	db := data.NewDummyDB()
+
 	app := &application{
 		logger: logger,
 		config: cfg,
+		models: data.NewModels(db),
 	}
 
 	srv := &http.Server{
