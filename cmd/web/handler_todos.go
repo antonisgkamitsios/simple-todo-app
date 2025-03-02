@@ -3,14 +3,14 @@ package main
 import (
 	"net/http"
 
-	"github.com/antonisgkamitsios/simple-todo-app/view" // new import
+	"github.com/antonisgkamitsios/simple-todo-app/view"
 )
 
 func (app *application) handleTodos(w http.ResponseWriter, r *http.Request) {
 	todos, err := app.models.Todos.GetAll()
 
 	if err != nil {
-		// todo: handle error
+		app.serverError(w, r, err)
 		return
 	}
 

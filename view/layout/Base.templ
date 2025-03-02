@@ -16,6 +16,7 @@ templ Base(title string) {
 				<meta charset="UTF-8"/>
 				<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 				<link rel="stylesheet" type="text/css" href="static/styles.css"/>
+				<meta name="htmx-config" content='{"responseHandling": [{"csde":".*", "swap": true}]}'/>
 				<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 				<title>Simple Todo App | { title }</title>
 			</head>
