@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/antonisgkamitsios/simple-todo-app/internal/data"
+	"github.com/go-playground/form/v4"
 )
 
 type config struct {
@@ -14,9 +15,10 @@ type config struct {
 }
 
 type application struct {
-	config config
-	logger *slog.Logger
-	models data.Models
+	config      config
+	logger      *slog.Logger
+	models      data.Models
+	formDecoder *form.Decoder
 }
 
 func main() {
@@ -28,10 +30,13 @@ func main() {
 
 	db := data.NewDummyDB()
 
+	formDecoder := form.NewDecoder()
+
 	app := &application{
-		logger: logger,
-		config: cfg,
-		models: data.NewModels(db),
+		logger:      logger,
+		config:      cfg,
+		models:      data.NewModels(db),
+		formDecoder: formDecoder,
 	}
 
 	srv := &http.Server{
