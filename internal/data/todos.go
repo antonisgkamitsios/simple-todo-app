@@ -17,13 +17,11 @@ type TodoModel struct {
 	DB DummyDB
 }
 
-// Add the struct that will represent the Form for the new todo
 type TodoForm struct {
 	Title string
 	validator.Validator
 }
 
-// Add the validation method that will modify the FieldErrors in case of an error
 func ValidateTodo(todo *Todo, v *validator.Validator) {
 	v.Check(validator.NotBlank(todo.Title), "title", "This field cannot be empty")
 	v.Check(validator.MinChars(todo.Title, 10), "title", "This field must be more than 10 characters long")
