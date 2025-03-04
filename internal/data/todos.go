@@ -1,6 +1,7 @@
 package data
 
 import (
+	"slices"
 	"time"
 
 	"github.com/antonisgkamitsios/simple-todo-app/internal/validator"
@@ -18,18 +19,24 @@ type TodoModel struct {
 }
 
 type TodoForm struct {
-	Title string
-	validator.Validator
+	Title               string `form:"title"`
+	validator.Validator `form:"-"`
 }
 
 func ValidateTodo(todo *Todo, v *validator.Validator) {
 	v.Check(validator.NotBlank(todo.Title), "title", "This field cannot be empty")
 	v.Check(validator.MinChars(todo.Title, 10), "title", "This field must be more than 10 characters long")
-	v.Check(validator.MaxChars(todo.Title, 150), "title", "This field must be less than 151 characters long")
+	v.Check(validator.MaxChars(todo.Title, 150), "title", "This field must be less than 150 characters long")
 }
 
 func (m TodoModel) GetAll() ([]Todo, error) {
-	return m.DB.Todos, nil
+	cpyTodos := slices.Clone(m.DB.Todos)
+
+	slices.SortFunc(cpyTodos, func(a, b Todo) int {
+
+		return b.CreatedAt.Compare(a.CreatedAt)
+	})
+	return cpyTodos, nil
 }
 
 func (m TodoModel) Insert(todo *Todo) error {

@@ -1,25 +1,78 @@
 package view
 
 import "github.com/antonisgkamitsios/simple-todo-app/view/layout"
-import "github.com/antonisgkamitsios/simple-todo-app/internal/data" // new import
+import "github.com/antonisgkamitsios/simple-todo-app/internal/data"
 
 templ Todos(todos []data.Todo) {
 	@layout.Base("Todos") {
 		<div class="max-w-xl mx-auto mt-8 bg-white p-6 rounded-lg shadow-md">
 			<h1 class="text-2xl font-bold mb-4">My Todos</h1>
+			<button
+				hx-get="/todos/new"
+				hx-swap="outerHTML"
+				class="border-2 rounded-lg border-green-200 px-4 py-2 flex items-center gap-1.5 cursor-pointer hover:bg-green-50 transition-colors my-2 mx-auto min-w-[200px]"
+			>
+				<span class="text-xl font-bold leading-none relative top-[-1px]">+</span> New todo
+			</button>
 			if len(todos) == 0 {
 				<div>
 					<p class="text-gray-500 text-center">No todos yet. Add some tasks!</p>
 				</div>
 			} else {
-				<ul class="space-y-3">
+				<ul class="space-y-3" id="todos">
 					for _,todo := range todos {
-						<li class="flex items-center justify-between bg-gray-200 p-3 rounded-lg">
-							<span class="text-lg">{ todo.Title }</span>
-						</li>
+						@TodoCard(todo)
 					}
 				</ul>
 			}
 		</div>
 	}
+}
+
+templ TodoCard(todo data.Todo) {
+	<li class="flex items-center justify-between bg-gray-200 p-3 rounded-lg">
+		<span class="text-lg">{ todo.Title }</span>
+	</li>
+}
+
+templ TodoForm(f data.TodoForm) {
+	<form hx-post="/todos" hx-swap="outerHTML" class="bg-white p-6 rounded-lg max-w-xl mx-auto flex items-start justify-center gap-2">
+		<div class="has-[.error]:text-red-400">
+			<input
+				type="text"
+				name="title"
+				value={ f.Title }
+				id="title"
+				class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400"
+				placeholder="Enter a todo..."
+			/>
+			if val, exists := f.FieldErrors["title"]; exists {
+				<div class="text-red-400 error">
+					{ val }
+				</div>
+			}
+		</div>
+		<button
+			type="submit"
+			class="border-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+		>
+			Add
+		</button>
+		<button
+			type="button"
+			class="border-2 border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+			hx-get="/todos"
+			hx-target="#contents"
+			hx-swap="outerHTML"
+		>
+			Cancel
+		</button>
+	</form>
+}
+
+templ TodoFormWithTodo(f data.TodoForm, todo data.Todo) {
+	@TodoForm(f)
+	<div hx-swap-oob="afterbegin" id="todos">
+		@TodoCard(todo)
+	</div>
 }
