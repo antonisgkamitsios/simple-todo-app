@@ -14,7 +14,7 @@ type Todo struct {
 }
 
 type TodoModel struct {
-	DB DummyDB
+	DB *DummyDB
 }
 
 type TodoForm struct {
