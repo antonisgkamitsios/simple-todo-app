@@ -27,7 +27,7 @@ func (app *application) handleTodosCreate(w http.ResponseWriter, r *http.Request
 
 	err := app.decodePostForm(r, &input)
 
-	if err != nil || true {
+	if err != nil {
 		app.clientError(w, r, http.StatusBadRequest, "Something went wrong with processing the form, check the data and try again", false)
 		return
 	}

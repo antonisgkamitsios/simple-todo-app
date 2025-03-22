@@ -1,0 +1,30 @@
+package components
+
+templ Toast(flashType, message string) {
+	<div class={ "group fixed top-6 left-[50%] translate-x-[-50%] transition-transform animate-drop", flashType }>
+		<div class="max-w-lg min-w-80 group-[.success]:bg-teal-500 group-[.error]:bg-red-400 text-sm text-white rounded-xl shadow-lg" role="alert" tabindex="-1" aria-labelledby="hs-toast-solid-color-teal-label">
+			<div id="hs-toast-solid-color-teal-label" class="flex items-center p-4 text-base">
+				{ message }
+				<div class="ms-auto">
+					<button type="button" class="inline-flex shrink-0 justify-center items-center size-7 rounded-lg text-white hover:text-white opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100" aria-label="Close">
+						<span class="sr-only">Close</span>
+						<svg class="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M18 6 6 18"></path>
+							<path d="m6 6 12 12"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+					(function(){
+						const flash = document.currentScript.closest('div')
+						const closeBt = flash.querySelector('button')
+						closeBt?.addEventListener('click', () => {flash?.remove()})
+						setTimeout(() => {
+							flash?.remove()
+						},4000)
+					})()
+				</script>
+	</div>
+}
