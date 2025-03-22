@@ -37,7 +37,13 @@ templ TodoCard(todo data.Todo) {
 }
 
 templ TodoForm(f data.TodoForm) {
-	<form hx-post="/todos" hx-swap="outerHTML" class="bg-white p-6 rounded-lg max-w-xl mx-auto flex items-start justify-center gap-2">
+	<form
+		hx-post="/todos"
+		hx-swap="outerHTML"
+		hx-indicator=".form-button"
+		hx-disabled-elt=".form-button"
+		class="bg-white p-6 rounded-lg max-w-xl mx-auto flex items-start justify-center gap-2"
+	>
 		<div class="has-[.error]:text-red-400">
 			<input
 				type="text"
@@ -55,13 +61,13 @@ templ TodoForm(f data.TodoForm) {
 		</div>
 		<button
 			type="submit"
-			class="border-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+			class="form-button border-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition [.htmx-request]:bg-green-200 [.htmx-request]:cursor-not-allowed"
 		>
 			Add
 		</button>
 		<button
 			type="button"
-			class="border-2 border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+			class="form-button border-2 border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition [.htmx-request]:text-gray-200 [.htmx-request]:border-gray-200 [.htmx-request]:cursor-not-allowed"
 			hx-get="/todos"
 			hx-target="#contents"
 			hx-swap="outerHTML"
