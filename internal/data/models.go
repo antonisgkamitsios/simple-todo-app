@@ -16,6 +16,6 @@ func NewModels(db *DummyDB) Models {
 
 func NewDummyDB() *DummyDB {
 	return &DummyDB{
-		Todos: []Todo{{Title: "Clean room"}, {Title: "Change clothes"}},
+		Todos: []Todo{{ID: 1, Title: "Clean room"}, {ID: 2, Title: "Change clothes"}},
 	}
 }
