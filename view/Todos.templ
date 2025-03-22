@@ -30,7 +30,7 @@ templ Todos(todos []data.Todo) {
 }
 
 templ TodoCard(todo data.Todo) {
-	<li class="flex items-center justify-between bg-gray-200 p-3 rounded-lg">
+	<li class="flex items-center justify-between bg-gray-200 p-3 rounded-lg [.htmx-added]:bg-green-500 transition duration-700 ease-in-out">
 		<span class="text-lg">{ todo.Title }</span>
 	</li>
 }
