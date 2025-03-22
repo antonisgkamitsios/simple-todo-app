@@ -11,7 +11,7 @@ func (app *application) handleTodos(w http.ResponseWriter, r *http.Request) {
 	todos, err := app.models.Todos.GetAll()
 
 	if err != nil {
-		app.serverError(w, r, err)
+		app.serverError(w, r, err, true)
 		return
 	}
 
@@ -27,8 +27,8 @@ func (app *application) handleTodosCreate(w http.ResponseWriter, r *http.Request
 
 	err := app.decodePostForm(r, &input)
 
-	if err != nil {
-		app.clientError(w, r, http.StatusBadRequest, "Something went wrong with processing the form, check the data and try again")
+	if err != nil || true {
+		app.clientError(w, r, http.StatusBadRequest, "Something went wrong with processing the form, check the data and try again", false)
 		return
 	}
 
@@ -40,7 +40,7 @@ func (app *application) handleTodosCreate(w http.ResponseWriter, r *http.Request
 
 	err = app.models.Todos.Insert(todo)
 	if err != nil {
-		app.serverError(w, r, err)
+		app.serverError(w, r, err, false)
 		return
 	}
 
