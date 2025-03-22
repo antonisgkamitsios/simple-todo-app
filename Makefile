@@ -2,12 +2,11 @@
 # re-create _templ.txt files on change, then send reload event to browser. 
 # Default url: http://localhost:7331
 live/templ:
-	templ generate --watch --proxy="http://localhost:3000" --open-browser=false -v --path="./view"
+	templ generate --watch --proxy="http://localhost:3000" --proxybind="localhost" --open-browser=false -v --path="./view"
 
 # first kill any process that runs on 3000 and run air to detect any go file changes
 # to re-build and re-run the server
 live/server:
-	@lsof -t -i :3000 | xargs -r kill
 	go run github.com/cosmtrek/air@v1.51.0 \
 	--build.cmd "go build -o tmp/bin/main ./cmd/web" --build.bin "tmp/bin/main -port=3000" --build.delay "100" \
 	--build.exclude_dir "node_modules" \
