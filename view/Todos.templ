@@ -2,6 +2,7 @@ package view
 
 import "github.com/antonisgkamitsios/simple-todo-app/view/layout"
 import "github.com/antonisgkamitsios/simple-todo-app/internal/data"
+import "github.com/antonisgkamitsios/simple-todo-app/view/components"
 
 templ Todos(todos []data.Todo) {
 	@layout.Base("Todos") {
@@ -71,6 +72,7 @@ templ TodoForm(f data.TodoForm) {
 }
 
 templ TodoFormWithTodo(f data.TodoForm, todo data.Todo) {
+	@components.Flash()
 	@TodoForm(f)
 	<div hx-swap-oob="afterbegin" id="todos">
 		@TodoCard(todo)

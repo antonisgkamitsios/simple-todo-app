@@ -1,0 +1,12 @@
+package components
+
+import "github.com/antonisgkamitsios/simple-todo-app/internal/flash"
+
+templ Flash() {
+	{{ f := flash.ContextGetFlash(ctx) }}
+	if f.Message != "" {
+		<div hx-swap-oob="true" id="flash">
+			@Toast(f.FlashType, f.Message)
+		</div>
+	}
+}

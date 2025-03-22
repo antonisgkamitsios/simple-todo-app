@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/antonisgkamitsios/simple-todo-app/internal/data"
+	"github.com/antonisgkamitsios/simple-todo-app/internal/flash"
 	"github.com/antonisgkamitsios/simple-todo-app/view"
 )
 
@@ -43,6 +44,8 @@ func (app *application) handleTodosCreate(w http.ResponseWriter, r *http.Request
 		app.serverError(w, r, err, false)
 		return
 	}
+
+	r = flash.ContextSetFlash(r, flash.FlashTypeSuccess, "The todo was successfully added!")
 
 	app.render(w, r, http.StatusCreated, view.TodoFormWithTodo(data.TodoForm{}, *todo))
 }
