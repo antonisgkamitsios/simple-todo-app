@@ -3,6 +3,7 @@ package view
 import "github.com/antonisgkamitsios/simple-todo-app/view/layout"
 import "github.com/antonisgkamitsios/simple-todo-app/internal/data"
 import "github.com/antonisgkamitsios/simple-todo-app/view/components"
+import "fmt"
 
 templ Todos(todos []data.Todo) {
 	@layout.Base("Todos") {
@@ -15,24 +16,28 @@ templ Todos(todos []data.Todo) {
 			>
 				<span class="text-xl font-bold leading-none relative top-[-1px]">+</span> New todo
 			</button>
-			if len(todos) == 0 {
-				<div>
-					<p class="text-gray-500 text-center">No todos yet. Add some tasks!</p>
-				</div>
-			} else {
-				<ul class="space-y-3" id="todos">
-					for _,todo := range todos {
-						@TodoCard(todo)
-					}
-				</ul>
-			}
+			<ul class="space-y-3 peer" id="todos">
+				for _,todo := range todos {
+					@TodoCard(todo)
+				}
+			</ul>
+			<div class="hidden peer-empty:block">
+				<p class="text-gray-500 text-center">No todos yet. Add some tasks!</p>
+			</div>
 		</div>
 	}
 }
 
 templ TodoCard(todo data.Todo) {
-	<li class="flex items-center justify-between bg-gray-200 p-3 rounded-lg [.htmx-added]:bg-green-500 transition duration-700 ease-in-out">
+	{{ id := fmt.Sprintf("todo-%d", todo.ID) }}
+	<li id={ id } class="flex items-center justify-between bg-gray-200 p-3 rounded-lg [.htmx-added]:bg-green-500 transition duration-700 ease-in-out">
 		<span class="text-lg">{ todo.Title }</span>
+		<button
+			hx-delete={ fmt.Sprintf("/todos/%d", todo.ID) }
+			hx-target={ fmt.Sprintf("#%s", id) }
+			hx-swap="outerHTML"
+			class="bg-red-200 px-2 py-1 rounded-lg cursor-pointer hover:bg-red-300"
+		>delete</button>
 	</li>
 }
 

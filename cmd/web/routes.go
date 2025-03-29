@@ -16,6 +16,7 @@ func (app *application) routes() http.Handler {
 	router.HandlerFunc(http.MethodGet, "/todos", app.handleTodos)
 	router.HandlerFunc(http.MethodPost, "/todos", app.handleTodosCreate)
 	router.HandlerFunc(http.MethodGet, "/todos/new", app.handleTodosNew)
+	router.HandlerFunc(http.MethodDelete, "/todos/:id", app.handleTodosDelete)
 
 	return app.disableCacheInDevMode(app.comesFromHTMX(router))
 }

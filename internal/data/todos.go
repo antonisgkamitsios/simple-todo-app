@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"slices"
 	"time"
 
@@ -47,5 +48,22 @@ func (m TodoModel) Insert(todo *Todo) error {
 	todo.Done = false
 	m.DB.Todos = append(m.DB.Todos, *todo)
 
+	return nil
+}
+
+func (m TodoModel) Delete(id int64) error {
+	todoIndexToDelete := -1
+
+	for index, todo := range m.DB.Todos {
+		if id == todo.ID {
+			todoIndexToDelete = index
+			break
+		}
+	}
+	if todoIndexToDelete == -1 {
+		return errors.New("could not find todo to delete")
+	}
+
+	m.DB.Todos = slices.Delete(m.DB.Todos, todoIndexToDelete, todoIndexToDelete+1)
 	return nil
 }
