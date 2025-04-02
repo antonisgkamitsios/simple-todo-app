@@ -67,3 +67,32 @@ func (m TodoModel) Delete(id int64) error {
 	m.DB.Todos = slices.Delete(m.DB.Todos, todoIndexToDelete, todoIndexToDelete+1)
 	return nil
 }
+
+func (m TodoModel) GetByID(id int64) (*Todo, error) {
+	var todo *Todo
+
+	for _, t := range m.DB.Todos {
+		if id == t.ID {
+			todo = &t
+			break
+		}
+	}
+
+	if todo == nil {
+		return nil, errors.New("could not find todo")
+	}
+
+	return todo, nil
+}
+
+func (m TodoModel) Update(todo *Todo) error {
+	for i, dbTodo := range m.DB.Todos {
+		if dbTodo.ID == todo.ID {
+			m.DB.Todos[i].Title = todo.Title
+			m.DB.Todos[i].Done = todo.Done
+			return nil
+		}
+	}
+
+	return errors.New("could not find todo to update")
+}
