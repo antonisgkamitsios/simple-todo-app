@@ -18,7 +18,7 @@ templ Todos(todos []data.Todo) {
 			</button>
 			<ul class="space-y-3 peer" id="todos">
 				for _,todo := range todos {
-					@TodoCard(todo)
+					@TodoCard(todo, false)
 				}
 			</ul>
 			<div class="hidden peer-empty:block">
@@ -28,16 +28,41 @@ templ Todos(todos []data.Todo) {
 	}
 }
 
-templ TodoCard(todo data.Todo) {
+templ TodoCard(todo data.Todo, new bool) {
 	{{ id := fmt.Sprintf("todo-%d", todo.ID) }}
-	<li id={ id } class="flex items-center justify-between bg-gray-200 p-3 rounded-lg [.htmx-added]:bg-green-500 transition duration-700 ease-in-out">
+	<li
+		id={ id }
+		class={ "flex items-center justify-between bg-gray-200 p-3 rounded-lg d transition duration-700 ease-in-out", 
+						templ.KV("[.htmx-added]:bg-green-500", new) }
+	>
 		<span class="text-lg">{ todo.Title }</span>
-		<button
-			hx-delete={ fmt.Sprintf("/todos/%d", todo.ID) }
-			hx-target={ fmt.Sprintf("#%s", id) }
-			hx-swap="outerHTML"
-			class="bg-red-200 px-2 py-1 rounded-lg cursor-pointer hover:bg-red-300"
-		>delete</button>
+		<div class="flex flex-row gap-2">
+			<button
+				hx-get={ fmt.Sprintf("/todos/edit/%d", todo.ID) }
+				hx-target={ fmt.Sprintf("#%s", id) }
+				class="bg-blue-200 px-2 py-1 rounded-lg cursor-pointer hover:bg-blue-300"
+			>
+				edit
+			</button>
+			<button
+				hx-delete={ fmt.Sprintf("/todos/%d", todo.ID) }
+				hx-target={ fmt.Sprintf("#%s", id) }
+				hx-swap="outerHTML"
+				class="bg-red-200 px-2 py-1 rounded-lg cursor-pointer hover:bg-red-300"
+			>
+				delete
+			</button>
+		</div>
+		if new {
+			<script>
+				(function() {
+					const card = document.currentScript.closest('li')
+					document.addEventListener('htmx:afterSettle', () => {
+						card.classList.remove('[.htmx-added]:bg-green-500')
+					},{ once: true })
+				}())
+			</script>
+		}
 	</li>
 }
 
@@ -82,10 +107,53 @@ templ TodoForm(f data.TodoForm) {
 	</form>
 }
 
+templ TodoFormEdit(f data.TodoForm, todoID int64) {
+	{{ id := fmt.Sprintf("todo-%d", todoID) }}
+	<form
+		hx-patch={ fmt.Sprintf("/todos/%d", todoID) }
+		hx-target={ fmt.Sprintf("#%s", id) }
+		hx-swap="outerHTML"
+		hx-indicator=".form-button"
+		hx-disabled-elt=".form-button"
+		class="bg-white p-6 rounded-lg max-w-xl mx-auto flex items-start justify-center gap-2"
+	>
+		<div class="has-[.error]:text-red-400">
+			<input
+				type="text"
+				name="title"
+				value={ f.Title }
+				id="title"
+				class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400"
+				placeholder="Enter a todo..."
+			/>
+			if val, exists := f.FieldErrors["title"]; exists {
+				<div class="text-red-400 error">
+					{ val }
+				</div>
+			}
+		</div>
+		<button
+			type="submit"
+			class="form-button border-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition [.htmx-request]:bg-green-200 [.htmx-request]:cursor-not-allowed"
+		>
+			Edit
+		</button>
+		<button
+			type="button"
+			class="form-button border-2 border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition [.htmx-request]:text-gray-200 [.htmx-request]:border-gray-200 [.htmx-request]:cursor-not-allowed"
+			hx-get={ fmt.Sprintf("/todos/t/%d", todoID) }
+			hx-target={ fmt.Sprintf("#%s", id) }
+			hx-swap="outerHTML"
+		>
+			Cancel
+		</button>
+	</form>
+}
+
 templ TodoFormWithTodo(f data.TodoForm, todo data.Todo) {
 	@components.Flash()
 	@TodoForm(f)
 	<div hx-swap-oob="afterbegin" id="todos">
-		@TodoCard(todo)
+		@TodoCard(todo, true)
 	</div>
 }
