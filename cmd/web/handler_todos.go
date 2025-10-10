@@ -121,6 +121,7 @@ func (app *application) handleTodosUpdate(w http.ResponseWriter, r *http.Request
 	todo.Title = input.Title
 
 	if data.ValidateTodo(todo, &input.Validator); !input.Validator.Valid() {
+		w.Header().Add("HX-Retarget", "this")
 		app.render(w, r, http.StatusUnprocessableEntity, view.TodoFormEdit(input, todo.ID))
 		return
 	}
