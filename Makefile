@@ -2,14 +2,14 @@
 # re-create _templ.txt files on change, then send reload event to browser. 
 # Default url: http://localhost:7331
 live/templ:
-	go tool templ generate --watch --proxy="http://localhost:3000" open-browser=false -v --path="./view"
+	go tool templ generate --watch --proxy="http://localhost:3000" -open-browser=false -path="./view" -cmd="echo Initial generation done"
 
 # first kill any process that runs on 3000 and run air to detect any go file changes
 # to re-build and re-run the server
 live/server:
 	go run github.com/cosmtrek/air@v1.51.0 \
 	--build.cmd "go build -o tmp/bin/main ./cmd/web" --build.bin "tmp/bin/main -port=3000" --build.delay "100" \
-	--build.exclude_dir "node_modules" \
+	--build.exclude_dir "node_modules,tmp" \
 	--build.include_ext "go" \
 	--build.stop_on_error "false" \
 	--misc.clean_on_exit true
@@ -21,7 +21,7 @@ live/tailwind:
 # watch for any js or css change in the assets/ folder, then reload the browser via templ proxy.
 live/sync_assets:
 	go run github.com/cosmtrek/air@v1.51.0 \
-	--build.cmd "templ generate --notify-proxy" \
+	--build.cmd "go tool templ generate --notify-proxy" \
 	--build.bin "true" \
 	--build.delay "100" \
 	--build.exclude_dir "" \
